@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://wwww.thymeleaf.org"
+      xmlns:sec="http://wwww.thymeleaf.org/extras/spring-security"
+      layout:decorate="Template1">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div layout:fragment="content1">
+        <div class="container mt-2">
+            <div class="card">
+                <div class="card-header">liste des patients</div>
+                <div class="card-body">
+                    <form method="get" th:action="@{/user/index}">
+                        <label>Keyword</label>
+                        <input type="text" name="keyword" th:value="${keyword}">
+                        <button type="submit" class="btn btn-primary" >chercher</button>
+                    </form>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nom</th>
+                            <th>Date</th>
+                            <th>Malade</th>
+                            <th>Score</th>
+                            <th sec:authorize="hasAuthority('ADMIN')"></th>
+                            <th sec:authorize="hasAuthority('ADMIN')"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p:${listePatients}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${p.nom}"></td>
+                            <td th:text="${p.dateNaissance}"></td>
+                            <td th:text="${p.malade}"></td>
+                            <td th:text="${p.score}"></td>
+                            <!-- sec:authorize="hasRole('ADMIN')"-->
+                            <td sec:authorize="hasAuthority('ADMIN')"><a onclick="return confirm('Etes vous sur ?')"
+                                    class="btn btn-danger"
+                            th:href="@{/admin/delete(id=${p.id},
+                            keyword=${keyword},
+                            page=${currentPage}
+                            )}">delete</a></td>
+                          <!-- sec:authorize="hasRole('ADMIN')" //pour masquer le boutton-->
+                            <td sec:authorize="hasAuthority('ADMIN')">
+                                <a class="btn btn-success"
+                                   th:href="@{/admin/EditPatients(id=${p.id},
+                                   keyword=${keyword},
+                                   page=${currentPage}
+                            )}">Edit</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center">
+                        <ul class="nav nav-pills">
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-3'" th:if="${(currentPage-5)>0}" th:text="0"
+                                   th:href="@{/user/index(page=0, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-3'" th:if="${(currentPage-20)>=0}" th:text="${currentPage-20}"
+                                   th:href="@{/user/index(page=${currentPage-20}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage-5)>=0}" th:text="${currentPage-5}"
+                                   th:href="@{/user/index(page=${currentPage-5}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage-4)>=0}" th:text="${currentPage-4}"
+                                   th:href="@{/user/index(page=${currentPage-4}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage-3)>=0}" th:text="${currentPage-3}"
+                                   th:href="@{/user/index(page=${currentPage-3}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage-2)>=0}" th:text="${currentPage-2}"
+                                   th:href="@{/user/index(page=${currentPage-2}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage-1)>=0}" th:text="${currentPage-1}"
+                                   th:href="@{/user/index(page=${currentPage-1}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-primary mx-1'" th:text="${currentPage}"
+                                   th:href="@{/user/index(page=${currentPage}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage+1)<lastPage}" th:text="${currentPage+1}"
+                                   th:href="@{/user/index(page=${currentPage+1}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage+2)<lastPage}" th:text="${currentPage+2}"
+                                   th:href="@{/user/index(page=${currentPage+2}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage+3)<lastPage}" th:text="${currentPage+3}"
+                                   th:href="@{/user/index(page=${currentPage+3}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage+4)<lastPage}" th:text="${currentPage+4}"
+                                   th:href="@{/user/index(page=${currentPage+4}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-1'" th:if="${(currentPage+5)<lastPage}" th:text="${currentPage+5}"
+                                   th:href="@{/user/index(page=${currentPage+5}, keyword=${keyword})}"></a>
+                            </li>
+                            <li>
+                                <a th:class="'btn btn-outline-primary mx-3'" th:if="${(currentPage+20)<lastPage}" th:text="${currentPage+20}"
+                                   th:href="@{/user/index(page=${currentPage+20}, keyword=${keyword})}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
